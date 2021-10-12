@@ -750,10 +750,37 @@ local function ping(event, path, body)
   return respond(event, RESPONSES.pong);
 end
 
+local function validate_user(event, path, body)
+  local username = body["username"];
+  local password = body["password"];
+
+  if not username then
+    return respond(event, RESPONSES.invalid_body);
+  end
+
+  if not password or not username then
+    return respond(event, RESPONSES.invalid_body);
+  end
+
+  if not um.user_exists(username, hostname) then
+    return respond(event, Response(404, "User does not exist."));
+  end
+
+  if not um.test_password(username, hostname, password) then
+    return respond(event, Response(401, "Password not matched."));
+  end
+
+  respond(event, Response(200,  username .. " validation sucessful."));
+end
+
 --Routes and suitable request methods
 local ROUTES = {
   ping = {
     GET = ping;
+  };
+
+  validate_user = {
+    POST = validate_user;
   };
 
   user = {

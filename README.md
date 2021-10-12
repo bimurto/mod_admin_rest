@@ -74,6 +74,26 @@ Each `session` item in the `sessions` list has the following structure:
 + `404` User does not exist or not connected
 
 ---------------------------------------
+### validate user
+
+Validates the users username and password. If the user does not exist, response status code is `404`. If the password does not match, response status code is `401`. Otherwise `200`.
+
+> **POST** /admin_rest/validate_user
+
+```
+{
+    "username":"username",
+    "password": "mypassword"
+}
+```
+
+**Status codes**
+
++ `200` Username and password validation successful
++ `404` User does not exist
++ `401` Password does not match
+
+---------------------------------------
 
 ### get user connected
 
